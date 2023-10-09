@@ -1,0 +1,8 @@
+Name: Urreek
+HP: 80/80
+AC: 24
+-
+Name: Sophie
+HP: 62/62
+AC: 21
+-

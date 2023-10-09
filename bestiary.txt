@@ -1,0 +1,20 @@
+-
+Name: Abbot Tsujon
+Perception: +33
+Skills: Acrobatics +36, Athletics +33, Deception +33, Diplomacy +31, Occultism +33, Relgiion +34
+Str: +5
+Dex: +8
+Con: +5
+Int: +5
+Wis: +6
+Cha: +5
+AC: 44
+Fort: +33
+Ref: +36
+Will: +34
+HP: 350
+Attacks:
+-Sal Blossom|+36|deadly(d10)|4d10+13|negative
+-Fist|+36||4d6+13|bludgeoning
+-Khakkhara|+34|two-hand(d10)|4d6+13|bludgeoning
+-Temple Bell|+36||4d10+8|sonic
