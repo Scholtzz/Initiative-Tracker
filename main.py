@@ -235,34 +235,26 @@ def menu():
     return choice
 
 
+def validate_ac():
+    valid = False
+    combatant_ac = 0
+    while not valid:
+        try:
+            combatant_ac = int(input('Please enter your combatant\'s AC: '))
+            valid = True
+        except ValueError:
+            print('That is not a valid AC. Try again.\n')
+    return combatant_ac
+
+
 def add_combatant(init, preset_combatants=None):
     preset = False
     combatant_name = input('Please enter your combatant\'s name: ')
     if combatant_name in preset_combatants.keys():
         preset = True
     if not preset:
-        combatant_hp = ''
-        valid = False
-        while not valid:
-            combatant_hp = input('Please enter your combatant\'s HP (ex. 79/80): ')
-            if '/' not in combatant_hp:
-                print('That is not a valid HP value. Try again. (ex. 69/420)\n')
-            else:
-                try:
-                    hp_values = combatant_hp.split('/')
-                    hp_curr = int(hp_values[0])
-                    hp_max = int(hp_values[1])
-                    valid = True
-                except ValueError:
-                    print('That is not a valid HP value. Try again. (ex. 69/420)\n')
-        valid = False
-        combatant_ac = 0
-        while not valid:
-            try:
-                combatant_ac = int(input('Please enter your combatant\'s AC: '))
-                valid = True
-            except ValueError:
-                print('That is not a valid AC. Try again.\n')
+        hp_curr, hp_max = validate_hp()
+        combatant_ac = validate_ac()
     if preset:
         valid = False
         while not valid:
@@ -497,23 +489,7 @@ def import_creatures():
     file.close()
 
 
-def write_combatants():
-    try:
-        file = open("Combatants.txt", "r")
-        file_existed = True
-    except FileNotFoundError:
-        file = open('Combatants.txt', 'w')
-        file.close()
-        file = open('Combatants.txt', 'r')
-    combatant_name = input('Write the name of the combatant you wish to save: ')
-    contents = file.read()
-    valid = False
-    while not valid:
-        try:
-            combatant_ac = int(input('Enter the AC of the combatant you wish to save: '))
-            valid = True
-        except:
-            print('Please try again.')
+def validate_hp():
     combatant_hp = ''
     valid = False
     while not valid:
@@ -528,6 +504,23 @@ def write_combatants():
                 valid = True
             except ValueError:
                 print('That is not a valid HP value. Try again. (ex. 69/420)\n')
+    return hp_curr, hp_max
+
+
+
+def write_combatants():
+    try:
+        file = open("Combatants.txt", "r")
+        file_existed = True
+    except FileNotFoundError:
+        file = open('Combatants.txt', 'w')
+        file.close()
+        file = open('Combatants.txt', 'r')
+    combatant_name = input('Write the name of the combatant you wish to save: ')
+    contents = file.read()
+    combatant_ac = validate_ac()
+    hp_curr, hp_max = validate_hp()
+    combatant_hp = str(hp_curr) + '/' + str(hp_max)
     if combatant_name in contents:
         lines = contents.split('\n')
         for x in range(len(lines)):
