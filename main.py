@@ -2,20 +2,23 @@ from Initiative_Classes import *
 from random import *
 from Dice_Roller import *
 
-def preset_combatants():
+
+def import_combatants():
     preset_combatant_dict = {}
     file = open('combatants.txt', 'r')
     line = file.readline()
     while line != '':
-        name = line[6:len(line)-1]
+        name = line[6:len(line) - 1]
         line = file.readline()
-        hp = line[4:len(line)-1]
+        hp = line[4:len(line) - 1]
         line = file.readline()
-        ac = line[4:len(line)-1]
+        ac = line[4:len(line) - 1]
         hp_values = hp.split('/')
-        preset_combatant_dict[name] = Combatant(name=name, hp_curr=int(hp_values[0]), hp_max=int(hp_values[1]), ac=ac, initiative_value=0)
+        preset_combatant_dict[name] = Combatant(name=name, hp_curr=int(hp_values[0]), hp_max=int(hp_values[1]), ac=ac,
+                                                initiative_value=0)
         line = file.readline()
         line = file.readline()
+    file.close()
     return preset_combatant_dict
 
 
@@ -219,9 +222,11 @@ def menu():
           '\t7. Remove Condition on a Combatant.\n'
           '\t8. Set Sustained Spell on a Combatant.\n'
           '\t9. Remove Sustained Spell on a Combatant.\n'
-          '\t10. Quit.')
+          '\t10. Roll Dice.\n'
+          '\t11. Save a Combatant for Later Use.\n'
+          '\t12. Quit.')
     choice = -1
-    while choice < 1 or choice > 10:
+    while choice < 1 or choice > 12:
         try:
             choice = int(input('Enter the number corresponding to what you would like to do next: '))
             print()
@@ -439,7 +444,10 @@ def remove_effect(init):
             if character.lower() == combatant.name.lower():
                 found = True
                 condition_name = input('Which effect would you like to remove: ')
-                combatant.effects.remove(condition_name)
+                try:
+                    combatant.effects.remove(condition_name)
+                except ValueError:
+                    print('The condition', condition_name, "could not be found.")
         if not found:
             print('The combatant ' + character + ' could not be found. Try again.')
     else:
@@ -489,12 +497,67 @@ def import_creatures():
     file.close()
 
 
+def write_combatants():
+    try:
+        file = open("Combatants.txt", "r")
+        file_existed = True
+    except FileNotFoundError:
+        file = open('Combatants.txt', 'w')
+        file.close()
+        file = open('Combatants.txt', 'r')
+    combatant_name = input('Write the name of the combatant you wish to save: ')
+    contents = file.read()
+    valid = False
+    while not valid:
+        try:
+            combatant_ac = int(input('Enter the AC of the combatant you wish to save: '))
+            valid = True
+        except:
+            print('Please try again.')
+    combatant_hp = ''
+    valid = False
+    while not valid:
+        combatant_hp = input('Please enter your combatant\'s HP (ex. 79/80): ')
+        if '/' not in combatant_hp:
+            print('That is not a valid HP value. Try again. (ex. 69/420)\n')
+        else:
+            try:
+                hp_values = combatant_hp.split('/')
+                hp_curr = int(hp_values[0])
+                hp_max = int(hp_values[1])
+                valid = True
+            except ValueError:
+                print('That is not a valid HP value. Try again. (ex. 69/420)\n')
+    if combatant_name in contents:
+        lines = contents.split('\n')
+        for x in range(len(lines)):
+            if 'Name: ' in lines[x]:
+                if combatant_name == lines[x][6:len(lines[x])]:
+                    lines[x+1] = 'HP:' + combatant_hp
+                    lines[x+2] = 'AC:' + str(combatant_ac)
+        file.close()
+        file = open('Combatants.txt', 'w')
+        for x in range(len(lines)):
+            if x != 0:
+                file.write('\n' + lines[x])
+            else:
+                file.write(lines[x])
+        file.close()
+    else:
+        file = open("combatants.txt", "a")
+        file.write('\nName: ' + combatant_name)
+        file.write('\nHP: ' + combatant_hp)
+        file.write('\nAC: ' + str(combatant_ac))
+        file.write('\n-')
+        file.close()
+
+
 def main():
     import_creatures()
     count_loop = True
     init = Initiative()
     preset_effects = preset_conditions()
-    preset_combatant_dict = preset_combatants()
+    preset_combatant_dict = import_combatants()
     while count_loop:
         init.print_self()
         choice = menu()
@@ -517,6 +580,11 @@ def main():
         if choice == 9:
             remove_sustain_spell(init)
         if choice == 10:
+            die_roller()
+        if choice == 11:
+            write_combatants()
+            preset_combatant_dict = import_combatants()
+        if choice == 12:
             sure = input('Enter \'Yes\' to confirm you are attempting to quit: ')
             if sure.lower() == 'yes':
                 count_loop = False

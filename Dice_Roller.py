@@ -6,11 +6,9 @@ class Dice:
         self.die_num = die_num
         self.pip_num = pip_num
         self.dice_string = dice_string
-        print(die_num + 'd' + pip_num, dice_string)
         self.result = 0
         for x in range(int(die_num)):
             rand_num = randint(1, int(pip_num))
-            print(rand_num)
             self.result += rand_num
 
 
@@ -35,16 +33,19 @@ def dice_parser(full_dice):
 
 
 def die_roller():
-    done = False
-    while not done:
+    try:
         full_dice = input('What would you like to roll? ')
-        if full_dice == 'done':
-            done = True
         eval_dice = full_dice
+        print_str = eval_dice
         dice_set = dice_parser(full_dice)
         for die in dice_set:
             eval_dice = eval_dice.replace(die.dice_string, str(die.result))
-        print(full_dice, eval_dice, eval(eval_dice))
+        for die in dice_set:
+            print_str = print_str.replace(die.dice_string, die.dice_string + '(' + str(die.result) + ')')
+        print_str += ' = ' + str(eval(eval_dice))
+        print(print_str)
+    except:
+        print('Please try again.')
 
 
 def reverse(string):
@@ -52,6 +53,3 @@ def reverse(string):
     for x in reversed(range(len(string))):
         new_string += string[x]
     return new_string
-
-
-die_roller()
