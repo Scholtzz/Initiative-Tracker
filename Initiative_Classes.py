@@ -162,13 +162,3 @@ class Initiative:
         else:
             print('You should probably add some combatants to modify. Try again')
 
-
-class Dice:
-    def __init__(self, die_num=0, pip_num=0, dice_string=''):
-        self.die_num = die_num
-        self.pip_num = pip_num
-        self.dice_string = dice_string
-        self.result = 0
-        for x in range(int(die_num)):
-            self.result += randint(1, int(pip_num))
-

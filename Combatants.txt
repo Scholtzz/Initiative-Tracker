@@ -6,3 +6,7 @@ Name: Sophie
 HP: 62/62
 AC: 21
 -
+Name: Frog
+HP: 78/78
+AC: 23
+-
