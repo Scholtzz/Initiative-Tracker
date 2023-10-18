@@ -285,14 +285,15 @@ def edit_effect(init):
 
 
 def import_creatures():
+    file_existed = False
     try:
         file = open("bestiary.txt", "r")
         file_existed = True
-        file.close()
     except FileNotFoundError:
         file = open("bestiary.txt", "w")
         file.close()
-    file = open("bestiary.txt", "r")
+    if not file_existed:
+        file = open("bestiary.txt", "r")
     for line in file:
         pass
     file.close()

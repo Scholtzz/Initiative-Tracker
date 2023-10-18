@@ -1,5 +1,6 @@
 from Initiative_Classes import *
 
+
 def import_combatants():
     preset_combatant_dict = {}
     file = open('combatants.txt', 'r')
@@ -172,7 +173,7 @@ def preset_conditions():
         'Stunned overrides slowed.',
         'If the duration of your stunned condition ends while you are slowed, you count the actions lost to the stunned condition toward those lost to being slowed.'
     ])
-    stupefied = Effect(name='Stupified', duration=-1, value=1, sub_effects=[
+    stupefied = Effect(name='Stupefied', duration=-1, value=1, sub_effects=[
         'You take a status penalty equal to this value on Intelligence-, Wisdom-, and Charisma-based checks and DCs, including Will saving throws, spell attack rolls, spell DCs, and skill checks that use these ability scores.',
         'Any time you attempt to Cast a Spell while stupefied, the spell is disrupted unless you succeed at a flat check with a DC equal to 5 + your stupefied value.'
     ])
@@ -203,9 +204,9 @@ def preset_conditions():
         'If you gain the dying condition while wounded, increase your dying condition value by your wounded value.'
     ])
     return [blinded, clumsy, concealed, confused, controlled, dazzled, deafened, doomed, drained, dying, encumbered,
-            fascinated, fatigued, flat_footed, fleeing, frightened, grabbed, hidden, immobilized, invisible, off_guard,
-            paralyzed, persistent_damage, petrified, prone, quickened, restrained, sickened, slowed, stunned, stupefied,
-            sustaining, unconscious, undetected, unnoticed, wounded]
+            enfeebled, fascinated, fatigued, flat_footed, fleeing, frightened, grabbed, hidden, immobilized, invisible,
+            off_guard, paralyzed, persistent_damage, petrified, prone, quickened, restrained, sickened, slowed, stunned,
+            stupefied, sustaining, unconscious, undetected, unnoticed, wounded]
 
 
 def alphabet_init():
