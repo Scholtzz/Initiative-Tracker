@@ -216,3 +216,65 @@ def alphabet_init():
     for x in range(95, 128):
         alphabet.append(chr(x))
     return alphabet
+
+
+def import_creatures():
+    bestiary = []
+    file_existed = False
+    try:
+        file = open("bestiary.txt", "r")
+        file_existed = True
+    except FileNotFoundError:
+        file = open("bestiary.txt", "w")
+        file.close()
+    if not file_existed:
+        file = open("bestiary.txt", "r")
+    line = file.readline()
+    while line != '':
+        name = line[6:len(line) - 1]
+        line = file.readline()
+        perc = line[11:len(line)-1]
+        line = file.readline()
+        raw_skill_list = line[7:].split(',')
+        skill_list = []
+        for skill in raw_skill_list:
+            curr_skill = skill.split()
+            skill_list.append(Skill(curr_skill[0], curr_skill[1]))
+        line = file.readline()
+        str = line[5:]
+        line = file.readline()
+        dex = line[5:]
+        line = file.readline()
+        con = line[5:]
+        line = file.readline()
+        int = line[5:]
+        line = file.readline()
+        wis = line[5:]
+        line = file.readline()
+        cha = line[5:]
+        line = file.readline()
+        ac = line[4:]
+        line = file.readline()
+        fort = line[6:]
+        line = file.readline()
+        ref = line[5:]
+        line = file.readline()
+        will = line[6:]
+        line = file.readline()
+        hp = line[4:]
+        line = file.readline()
+        attack_list = []
+        while line[:8] == "Attack: ":
+            attack_info = line[8:].split('|')
+            attack_name = attack_info[0]
+            attack_to_hit = attack_info[1]
+            attack_conditions = attack_info[2]
+            attack_damage = attack_info[3]
+            attack_damage_type = attack_info[4]
+            attack_list.append(Attack(attack_name, attack_to_hit, attack_conditions, attack_damage, attack_damage_type))
+            line = file.readline()
+        file.readline()
+        line = file.readline()
+        bestiary.append(Creature(name, perc, skill_list, str, dex, con, int, wis, cha, ac, fort, ref, will, hp, attack_list))
+    file.close()
+    return bestiary

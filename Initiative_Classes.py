@@ -166,3 +166,34 @@ class Initiative:
         if len(self.combatantsList) == 0:
             return True
         return False
+
+class Creature:
+    def __init__(self, name='', perc=0, skills=[], str=0, dex=0, con=0, int=0, wis=0, cha=0, ac=10, fort=0, ref=0, will=0, hp=1, attack_list=[]):
+        self.name = name
+        self.perc = perc
+        self.skills = skills
+        self.str = str
+        self.dex = dex
+        self.con = con
+        self.int = int
+        self.wis = wis
+        self.cha = cha
+        self.ac = ac
+        self.fort = fort
+        self.ref = ref
+        self.will = will
+        self.hp = hp
+        self.attack_list = attack_list
+
+class Skill:
+    def __init__(self, name='', value=0):
+        self.name = name
+        self.value = value
+
+class Attack:
+    def __init__(self, name='', to_hit=0, conditions='', damage=0, damage_type=''):
+        self.name = name
+        self.to_hit = to_hit
+        self.conditions = conditions
+        self.damage = damage
+        self.damage_type = damage_type

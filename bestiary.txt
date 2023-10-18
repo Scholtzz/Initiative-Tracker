@@ -1,6 +1,6 @@
 Name: Abbot Tsujon
 Perception: +33
-Skills: Acrobatics +36, Athletics +33, Deception +33, Diplomacy +31, Occultism +33, Relgiion +34
+Skill: Acrobatics +36, Athletics +33, Deception +33, Diplomacy +31, Occultism +33, Religion +34
 Str: +5
 Dex: +8
 Con: +5

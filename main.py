@@ -284,21 +284,6 @@ def edit_effect(init):
         print('Your combatant or their condition could not be found. Try again.')
 
 
-def import_creatures():
-    file_existed = False
-    try:
-        file = open("bestiary.txt", "r")
-        file_existed = True
-    except FileNotFoundError:
-        file = open("bestiary.txt", "w")
-        file.close()
-    if not file_existed:
-        file = open("bestiary.txt", "r")
-    for line in file:
-        pass
-    file.close()
-
-
 def write_combatants():
     file_existed = False
     try:
