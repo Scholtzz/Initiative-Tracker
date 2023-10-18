@@ -61,7 +61,7 @@ class Initiative:
                             else:
                                 ticks_on = 'beginning'
                             print(' | Duration: <' + str(effect.duration) + ', ticks on ' + ticks_on + '>', end='')
-                        #if effect.value == 0 and effect.duration <= 0:
+                        # if effect.value == 0 and effect.duration <= 0:
                         #    print()
                         for subeffect in effect.sub_effects:
                             print('\n\t\t\t~ ' + subeffect, end='')
@@ -122,17 +122,17 @@ class Initiative:
                             self.combatantsList[0].effects.remove(effect)
 
                     else:
-                        self.combatantsList[i+1].active = True
+                        self.combatantsList[i + 1].active = True
                         finished = True
                         to_remove = []
-                        for effect in self.combatantsList[i+1].effects:
+                        for effect in self.combatantsList[i + 1].effects:
                             if not effect.end:
                                 if effect.duration > 0:
                                     effect.duration -= 1
                                 if effect.duration == 0:
                                     to_remove.append(effect)
                         for effect in to_remove:
-                            self.combatantsList[i+1].effects.remove(effect)
+                            self.combatantsList[i + 1].effects.remove(effect)
                 i += 1
         else:
             print('Please add combatants to the initiative before trying to move it along! Try again.')
@@ -162,3 +162,7 @@ class Initiative:
         else:
             print('You should probably add some combatants to modify. Try again')
 
+    def is_empty(self):
+        if len(self.combatantsList) == 0:
+            return True
+        return False
