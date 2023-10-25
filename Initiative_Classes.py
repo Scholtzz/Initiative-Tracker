@@ -44,10 +44,10 @@ class Initiative:
         print("Current Initiative (Round " + str(self.round) + "):")
         if len(self.combatantsList) > 0:
             for combatant in self.combatantsList:
-                if combatant.name != self.combatantsList[0].name:
-                    print()
                 if combatant.active:
                     print('-->', end='')
+                else:
+                    print()
                 print('\t' + str(combatant.initiative_value) + '. ' + combatant.name + " <" + str(
                     combatant.hp_curr) + "/" + str(combatant.hp_max) + "> [AC: " + str(combatant.ac) + ']', end='')
                 if len(combatant.effects) > 0:
@@ -167,9 +167,15 @@ class Initiative:
             return True
         return False
 
-class Creature:
-    def __init__(self, name='', perc=0, skills=[], str=0, dex=0, con=0, int=0, wis=0, cha=0, ac=10, fort=0, ref=0, will=0, hp=1, attack_list=[]):
+class Creature(Combatant):
+    def __init__(self, name='', hp_curr=0, hp_max=0, ac=0, initiative_value=0, active=False, perc=0, skills=[], str=0, dex=0, con=0, int=0, wis=0, cha=0, fort=0, ref=0, will=0, attack_list=[]):
+        super().__init__(name, hp_curr, hp_max, ac, initiative_value, active=False)
         self.name = name
+        self.hp_curr = hp_curr
+        self.hp_max = hp_max
+        self.ac = ac
+        self.initiative_value = initiative_value
+        self.active = active
         self.perc = perc
         self.skills = skills
         self.str = str
@@ -178,11 +184,9 @@ class Creature:
         self.int = int
         self.wis = wis
         self.cha = cha
-        self.ac = ac
         self.fort = fort
         self.ref = ref
         self.will = will
-        self.hp = hp
         self.attack_list = attack_list
 
 class Skill:

@@ -8,8 +8,9 @@ def menu():
           '\t2. Effect Options.\n'
           '\t3. Roll Dice.\n'
           '\t4. Save a Combatant for Later Use.\n'
-          '\t5. Quit.')
-    return choice_validator(5)
+          '\t5. Attack with a Creature.\n'
+          '\t6. Quit.')
+    return choice_validator(6)
 
 
 def init_menu():
@@ -108,26 +109,33 @@ def valid_condition_input(mode='set', effect=None):
     return val, dur
 
 
-def add_combatant(init, preset_combatants=None):
+def add_combatant(init, preset_combatants=None, bestiary_dict=None):
     preset = False
+    combatant = False
     combatant_name = input('Please enter your combatant\'s name: ')
     if combatant_name in preset_combatants.keys():
         preset = True
+        combatant = True
+        combatant_object = Combatant(preset_combatants[combatant_name].name, preset_combatants[combatant_name].hp_curr, preset_combatants[combatant_name].hp_max, preset_combatants[combatant_name].ac, preset_combatants[combatant_name].initiative_value)
+    if combatant_name in bestiary_dict.keys():
+        preset = True
+        beast_object = Creature(name=bestiary_dict[combatant_name].name, hp_curr=bestiary_dict[combatant_name].hp_curr, hp_max=bestiary_dict[combatant_name].hp_max, ac=bestiary_dict[combatant_name].ac, initiative_value=bestiary_dict[combatant_name].initiative_value, active=bestiary_dict[combatant_name].active, perc=bestiary_dict[combatant_name].perc, skills=bestiary_dict[combatant_name].skills, str=bestiary_dict[combatant_name].str, dex=bestiary_dict[combatant_name].dex, con=bestiary_dict[combatant_name].con, int=bestiary_dict[combatant_name].int, wis=bestiary_dict[combatant_name].wis, cha=bestiary_dict[combatant_name].cha, fort=bestiary_dict[combatant_name].fort, ref=bestiary_dict[combatant_name].ref, will=bestiary_dict[combatant_name].will, attack_list=bestiary_dict[combatant_name].attack_list)
     if not preset:
         hp_curr, hp_max = validate_hp()
         combatant_ac = validate_ac()
     if preset:
-        valid = False
-        while not valid:
-            try:
-                combatant_curr_hp = input('Please enter your combatant\'s current HP: ')
-                if combatant_curr_hp == '':
-                    combatant_curr_hp = preset_combatants[combatant_name].hp_curr
-                else:
-                    combatant_curr_hp = int(combatant_curr_hp)
-                valid = True
-            except ValueError:
-                print('Please try again. Input a valid integer.')
+        if combatant:
+            valid = False
+            while not valid:
+                try:
+                    combatant_curr_hp = input('Please enter your combatant\'s current HP: ')
+                    if combatant_curr_hp == '':
+                        combatant_curr_hp = combatant_object.hp_curr
+                    else:
+                        combatant_curr_hp = int(combatant_curr_hp)
+                    valid = True
+                except ValueError:
+                    print('Please try again. Input a valid integer.')
     combatant_init_value = 0
     valid = False
     while not valid:
@@ -139,9 +147,19 @@ def add_combatant(init, preset_combatants=None):
     if not preset:
         init.add_combatant(Combatant(combatant_name, hp_curr, hp_max, combatant_ac, combatant_init_value))
     if preset:
-        preset_combatants[combatant_name].initiative_value = combatant_init_value
-        preset_combatants[combatant_name].hp_curr = combatant_curr_hp
-        init.add_combatant(preset_combatants[combatant_name])
+        if combatant:
+            combatant_object.initiative_value = combatant_init_value
+            combatant_object.hp_curr = combatant_curr_hp
+            init.add_combatant(combatant_object)
+        else:
+            beast_object.initiative_value = combatant_init_value
+            beast_object.name = beast_object.name[:2].upper()
+            count = 1
+            for combatant in init.combatantsList:
+                if combatant.name.lower()[:2] == beast_object.name.lower():
+                    count += 1
+            beast_object.name = beast_object.name + str(count)
+            init.add_combatant(beast_object)
     if len(init.combatantsList) == 1:
         init.combatantsList[0].active = True
 
@@ -323,8 +341,60 @@ def write_combatants():
         file.close()
 
 
+def attack_combatant(init):
+    if len(init.combatantsList) > 1:
+        found = False
+        victim_found = False
+        attack_found = False
+        creature_name = input("Enter the combatant who will be attacking: ")
+        for combatant in init.combatantsList:
+            if creature_name.lower() == combatant.name.lower() and type(combatant) == Creature:
+                found = True
+                creature_object = combatant
+        if not found:
+            print('Your aggressor could not be found. Try again.')
+        if found:
+            victim = input("Enter the combatant who will be attacked: ")
+            for combatant_1 in init.combatantsList:
+                if victim.lower() == combatant_1.name.lower():
+                    victim_object = combatant_1
+                    victim_found = True
+        if not victim_found and found:
+            print("Your target could not be found. Try again.")
+        if victim_found:
+            attack_name = input("Which attack would you like to use: ")
+            for attack in creature_object.attack_list:
+                if attack_name.lower() == attack.name.lower():
+                    attack_object = attack
+            print()
+            attack_found = True
+            print(attack_object.name + '.')
+            attack_roll = roll("1d20" + attack_object.to_hit, "To Hit")
+            if attack_roll >= victim_object.ac:
+                print('Hit!')
+                damage_roll = roll(attack_object.damage, "Damage")
+                print()
+                victim_object.hp_curr = victim_object.hp_curr - damage_roll
+            else:
+                print('Miss!\n')
+        if not attack_found and victim_found and found:
+            print("Your attack could not be found. Try again.")
+    elif len(init.combatantsList) == 1:
+        print("You only have one combatant in your initiative. You shouldn't attack yourself! Add some more combatants!")
+    else:
+        print("It appears your combat is empty. Try adding some combatants!")
+
+
+def remove_numbers(dirty_string):
+    numbers = ['1','2','3','4','5','6','7','8','9','0']
+    for x in range(len(dirty_string)):
+        if dirty_string[x] in numbers:
+            dirty_string = dirty_string[:x] + dirty_string[x+1:]
+    return dirty_string
+
+
 def main():
-    import_creatures()
+    bestiary_dict = import_creatures()
     count_loop = True
     init = Initiative()
     preset_effects = preset_conditions()
@@ -335,7 +405,7 @@ def main():
         if choice == 1:
             choice = init_menu()
             if choice == 1:
-                add_combatant(init, preset_combatant_dict)
+                add_combatant(init, preset_combatant_dict, bestiary_dict)
             elif choice == 2:
                 modify_hp(init)
             elif choice == 3:
@@ -363,6 +433,8 @@ def main():
             write_combatants()
             preset_combatant_dict = import_combatants()
         elif choice == 5:
+            attack_combatant(init)
+        elif choice == 6:
             sure = input('Enter \'Yes\' to confirm you are attempting to quit: ')
             if sure.lower() == 'yes':
                 count_loop = False

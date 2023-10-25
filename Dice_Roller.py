@@ -75,13 +75,37 @@ def die_roller():
         for slice in removal_list:
             eval_dice = eval_dice[:slice-count] + eval_dice[slice+1-count:]
             count += 1
-        print(eval_dice)
         for die in dice_set:
             print_str = print_str.replace(die.dice_string, die.dice_string + '(' + str(die.present_die_list()) + ')')
         print_str += ' = ' + str(eval(eval_dice))
         print(print_str)
     except:
         print('Please try again.')
+
+def roll(full_dice, what=None):
+    eval_dice = full_dice
+    if what:
+        print_str = what + ": " + eval_dice
+    else:
+        print_str = eval_dice
+    dice_set = dice_parser(full_dice)
+    alphabet = alphabet_init()
+    removal_list = []
+    count = 0
+    for die in dice_set:
+        eval_dice = eval_dice.replace(die.dice_string, str(die.result))
+    for x in range(len(eval_dice)):
+        if eval_dice[x] in alphabet:
+            removal_list.append(x)
+    for slice in removal_list:
+        eval_dice = eval_dice[:slice - count] + eval_dice[slice + 1 - count:]
+        count += 1
+    for die in dice_set:
+        print_str = print_str.replace(die.dice_string, die.dice_string + '(' + str(die.present_die_list()) + ')')
+    print_str += ' = ' + str(eval(eval_dice))
+    print(print_str, end=' ')
+    return eval(eval_dice)
+
 
 
 def reverse(string):

@@ -12,7 +12,7 @@ def import_combatants():
         line = file.readline()
         ac = line[4:len(line) - 1]
         hp_values = hp.split('/')
-        preset_combatant_dict[name] = Combatant(name=name, hp_curr=int(hp_values[0]), hp_max=int(hp_values[1]), ac=ac,
+        preset_combatant_dict[name] = Combatant(name=name, hp_curr=int(hp_values[0]), hp_max=int(hp_values[1]), ac=int(ac),
                                                 initiative_value=0)
         file.readline()
         line = file.readline()
@@ -219,7 +219,7 @@ def alphabet_init():
 
 
 def import_creatures():
-    bestiary = []
+    bestiary_dict = {}
     file_existed = False
     try:
         file = open("bestiary.txt", "r")
@@ -247,7 +247,7 @@ def import_creatures():
         line = file.readline()
         con = line[5:]
         line = file.readline()
-        int = line[5:]
+        inte = line[5:]
         line = file.readline()
         wis = line[5:]
         line = file.readline()
@@ -275,6 +275,8 @@ def import_creatures():
             line = file.readline()
         file.readline()
         line = file.readline()
-        bestiary.append(Creature(name, perc, skill_list, str, dex, con, int, wis, cha, ac, fort, ref, will, hp, attack_list))
+        hp_curr = int(hp)
+        hp_max = int(hp)
+        bestiary_dict[name] = Creature(name, hp_curr, hp_max, int(ac), 0, False, int(perc), skill_list, int(str), int(dex), int(con), int(inte), int(wis), int(cha), int(fort), int(ref), int(will), attack_list=attack_list)
     file.close()
-    return bestiary
+    return bestiary_dict
