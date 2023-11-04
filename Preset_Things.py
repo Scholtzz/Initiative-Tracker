@@ -230,16 +230,22 @@ def import_creatures():
     if not file_existed:
         file = open("bestiary.txt", "r")
     line = file.readline()
+    x=0
     while line != '':
         name = line[6:len(line) - 1]
         line = file.readline()
         perc = line[11:len(line)-1]
         line = file.readline()
-        raw_skill_list = line[7:].split(',')
+        if ',' in line[7:]:
+            raw_skill_list = line[7:].split(',')
+        else:
+            raw_skill_list = []
+            raw_skill_list.append(line[7:])
+        raw_skill_list[-1] = raw_skill_list[-1][:-1]
         skill_list = []
         for skill in raw_skill_list:
             curr_skill = skill.split()
-            skill_list.append(Skill(curr_skill[0], curr_skill[1]))
+            skill_list.append(Skill(curr_skill[0].strip(), curr_skill[1]))
         line = file.readline()
         str = line[5:]
         line = file.readline()
@@ -262,19 +268,19 @@ def import_creatures():
         will = line[6:]
         line = file.readline()
         hp = line[4:]
-        line = file.readline()
         attack_list = []
-        while line[:8] == "Attack: ":
-            attack_info = line[8:].split('|')
-            attack_name = attack_info[0]
-            attack_to_hit = attack_info[1]
-            attack_conditions = attack_info[2]
-            attack_damage = attack_info[3]
-            attack_damage_type = attack_info[4]
-            attack_list.append(Attack(attack_name, attack_to_hit, attack_conditions, attack_damage, attack_damage_type))
-            line = file.readline()
-        file.readline()
         line = file.readline()
+        if line[:8] == "Attack: ":
+            while line[:8] == "Attack: ":
+                attack_info = line[8:].split('|')
+                attack_name = attack_info[0]
+                attack_to_hit = attack_info[1]
+                attack_conditions = attack_info[2]
+                attack_damage = attack_info[3]
+                attack_damage_type = attack_info[4]
+                attack_list.append(Attack(attack_name, attack_to_hit, attack_conditions, attack_damage, attack_damage_type))
+                line = file.readline()
+        line=file.readline()
         hp_curr = int(hp)
         hp_max = int(hp)
         bestiary_dict[name] = Creature(name, hp_curr, hp_max, int(ac), 0, False, int(perc), skill_list, int(str), int(dex), int(con), int(inte), int(wis), int(cha), int(fort), int(ref), int(will), attack_list=attack_list)

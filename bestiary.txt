@@ -1,19 +1,52 @@
 Name: Abbot Tsujon
-Perception: +33
+Perception: 33
 Skill: Acrobatics +36, Athletics +33, Deception +33, Diplomacy +31, Occultism +33, Religion +34
-Str: +5
-Dex: +8
-Con: +5
-Int: +5
-Wis: +6
-Cha: +5
+Str: 5
+Dex: 8
+Con: 5
+Int: 5
+Wis: 6
+Cha: 5
 AC: 44
-Fort: +33
-Ref: +36
-Will: +34
+Fort: 33
+Ref: 36
+Will: 34
 HP: 350
 Attack: Sal Blossom|+36|deadly(d10)|4d10+13|negative
 Attack: Fist|+36||4d6+13|bludgeoning
 Attack: Khakkhara|+34|two-hand(d10)|4d6+13|bludgeoning
 Attack: Temple Bell|+36||4d10+8|sonic
+-
+Name: Unseen Servant
+Perception: 0
+Skill: Stealth +8
+Str: -4
+Dex: 2
+Con: 0
+Int: -5
+Wis: 0
+Cha: 0
+AC: 13
+Fort: 0
+Ref: 4
+Will: 0
+HP: 4
+-
+Name: Aapoph Serpentfolk
+Perception: 8
+Skill: Acrobatics +7, Athletics +11, Intimidation +6
+Str: 4
+Dex: 2
+Con: 3
+Int: -3
+Wis: 1
+Cha: -1
+AC: 18
+Fort: 10
+Ref: 7
+Will: 6
+HP: 60
+Attack: Scimitar|11||1d6+6|Slashing
+Attack: Fangs|11||1d8+6|Piercing
+Attack: Tail|11||1d6+6|Bludgeoning
 -

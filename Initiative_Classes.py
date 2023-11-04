@@ -46,8 +46,6 @@ class Initiative:
             for combatant in self.combatantsList:
                 if combatant.active:
                     print('-->', end='')
-                else:
-                    print()
                 print('\t' + str(combatant.initiative_value) + '. ' + combatant.name + " <" + str(
                     combatant.hp_curr) + "/" + str(combatant.hp_max) + "> [AC: " + str(combatant.ac) + ']', end='')
                 if len(combatant.effects) > 0:
@@ -65,6 +63,8 @@ class Initiative:
                         #    print()
                         for subeffect in effect.sub_effects:
                             print('\n\t\t\t~ ' + subeffect, end='')
+                if combatant != self.combatantsList[len(self.combatantsList) - 1]:
+                    print()
         else:
             print("\tEmpty", end='')
         print()
@@ -120,7 +120,6 @@ class Initiative:
                                     to_remove.append(effect)
                         for effect in to_remove:
                             self.combatantsList[0].effects.remove(effect)
-
                     else:
                         self.combatantsList[i + 1].active = True
                         finished = True
@@ -166,6 +165,28 @@ class Initiative:
         if len(self.combatantsList) == 0:
             return True
         return False
+
+    def remove(self):
+        found = False
+        next = False
+        if len(self.combatantsList) > 0:
+            combatant_name = input('Please enter the name of the combatant whose initiative you would like to change: ')
+            for x in range(len(self.combatantsList)):
+                if self.combatantsList[x].name.lower() == combatant_name.lower():
+                    found = True
+                    if self.combatantsList[x].active:
+                        self.combatantsList[x].active = False
+                        if x != len(self.combatantsList)-1:
+                            self.combatantsList[x+1].active = True
+                        else:
+                            self.combatantsList[0].active = True
+                    remove_obj = self.combatantsList[x]
+            if found:
+                self.combatantsList.remove(remove_obj)
+            if not found:
+                print('The combatant ' + combatant_name + ' could not be found. Try again.')
+        else:
+            print('You should probably add some combatants to modify. Try again')
 
 class Creature(Combatant):
     def __init__(self, name='', hp_curr=0, hp_max=0, ac=0, initiative_value=0, active=False, perc=0, skills=[], str=0, dex=0, con=0, int=0, wis=0, cha=0, fort=0, ref=0, will=0, attack_list=[]):
