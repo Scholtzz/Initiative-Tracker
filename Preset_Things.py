@@ -283,6 +283,32 @@ def import_creatures():
         line=file.readline()
         hp_curr = int(hp)
         hp_max = int(hp)
-        bestiary_dict[name] = Creature(name, hp_curr, hp_max, int(ac), 0, False, int(perc), skill_list, int(str), int(dex), int(con), int(inte), int(wis), int(cha), int(fort), int(ref), int(will), attack_list=attack_list)
+        bestiary_dict[name] = Creature(name, hp_curr, hp_max, int(ac), 0, int(perc), skill_list, int(str), int(dex), int(con), int(inte), int(wis), int(cha), int(fort), int(ref), int(will), attack_list=attack_list)
+        final_skills = generate_skill_list(skill_list,bestiary_dict[name])
+        bestiary_dict[name].skills = final_skills
     file.close()
     return bestiary_dict
+
+def generate_skill_list(curr_skills, creature):
+    total_skills = {"Acrobatics": "dex", "Arcana": "int", "Athletics": "str", "Crafting": "int", "Deception": "cha", "Diplomacy": "cha", "Intimidation": "cha", "Lore": "int", "Medicine": "wis", "Nature": "wis", "Occultism": "int", "Performance": "cha", "Religion": "wis", "Society": "int", "Stealth": "dex", "Survival": "wis", "Thievery": "dex"}
+    used_skills = []
+    for used_skill in curr_skills:
+        used_skills.append(used_skill.name)
+    final_skills = []
+    for skill in total_skills:
+        if skill in used_skills:
+            final_skills.append(curr_skills[0])
+            curr_skills = curr_skills[1:]
+        else:
+            if total_skills[skill] == 'str':
+                new_skill = Skill(skill, creature.str)
+            elif total_skills[skill] == 'dex':
+                new_skill = Skill(skill, creature.dex)
+            elif total_skills[skill] == 'int':
+                new_skill = Skill(skill, creature.int)
+            elif total_skills[skill] == 'wis':
+                new_skill = Skill(skill, creature.wis)
+            else:
+                new_skill = Skill(skill, creature.cha)
+            final_skills.append(new_skill)
+    return final_skills

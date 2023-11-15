@@ -16,13 +16,14 @@ class Effect:
 
 
 class Combatant:
-    def __init__(self, name, hp_curr, hp_max, ac, initiative_value, active=False):
+    def __init__(self, name, hp_curr, hp_max, ac, initiative_value):
         self.name = name
         self.hp_curr = hp_curr
         self.hp_max = hp_max
         self.ac = ac
         self.effects = []
-        self.active = active
+        self.temp_hp = 0
+        self.active = False
         self.initiative_value = initiative_value
 
     def edit_hp(self, value=0, type="curr"):
@@ -47,7 +48,10 @@ class Initiative:
                 if combatant.active:
                     print('-->', end='')
                 print('\t' + str(combatant.initiative_value) + '. ' + combatant.name + " <" + str(
-                    combatant.hp_curr) + "/" + str(combatant.hp_max) + "> [AC: " + str(combatant.ac) + ']', end='')
+                    combatant.hp_curr) + "/" + str(combatant.hp_max) + ">", end='')
+                if combatant.temp_hp > 0:
+                    print("+(" + str(combatant.temp_hp), end=' temp)')
+                print(" [AC: " + str(combatant.ac) + ']', end='')
                 if len(combatant.effects) > 0:
                     for effect in combatant.effects:
                         print('\n\t\t- ' + effect.name, end='')
@@ -189,14 +193,15 @@ class Initiative:
             print('You should probably add some combatants to modify. Try again')
 
 class Creature(Combatant):
-    def __init__(self, name='', hp_curr=0, hp_max=0, ac=0, initiative_value=0, active=False, perc=0, skills=[], str=0, dex=0, con=0, int=0, wis=0, cha=0, fort=0, ref=0, will=0, attack_list=[]):
-        super().__init__(name, hp_curr, hp_max, ac, initiative_value, active=False)
+    def __init__(self, name='', hp_curr=0, hp_max=0, ac=0, initiative_value=0, perc=0, skills=[], str=0, dex=0, con=0, int=0, wis=0, cha=0, fort=0, ref=0, will=0, attack_list=[]):
+        super().__init__(name, hp_curr, hp_max, ac, initiative_value)
         self.name = name
         self.hp_curr = hp_curr
         self.hp_max = hp_max
         self.ac = ac
         self.initiative_value = initiative_value
-        self.active = active
+        self.temp_hp = 0
+        self.active = False
         self.perc = perc
         self.skills = skills
         self.str = str

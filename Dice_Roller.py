@@ -9,6 +9,7 @@ class Dice:
         self.dice_list = []
         self.adv = adv
         self.result = 0
+        self.crit = False
         for x in range(int(die_num)):
             mark = False
             rand_num = randint(1, int(pip_num))
@@ -27,6 +28,10 @@ class Dice:
                     self.result += rand_num
             else:
                 self.result += rand_num
+        if (len(self.dice_list) == 1 and self.dice_list == ['20']) or (len(self.dice_list) == 2 and (self.dice_list[0] == '20' or self.dice_list[1] == '20')):
+            self.crit = 'Success'
+        elif (len(self.dice_list) == 1 and self.dice_list == ['1']) or (len(self.dice_list) == 2 and (self.dice_list[0] == '1' or self.dice_list[1] == '1')):
+            self.crit = 'Fail'
 
     def present_die_list(self):
         present_list = ''
@@ -104,7 +109,10 @@ def roll(full_dice, what=None):
         print_str = print_str.replace(die.dice_string, die.dice_string + '(' + str(die.present_die_list()) + ')')
     print_str += ' = ' + str(eval(eval_dice))
     print(print_str, end=' ')
-    return eval(eval_dice)
+    crit_value = False
+    if len(dice_set) == 1:
+        crit_value = dice_set[0].crit
+    return eval(eval_dice), crit_value
 
 
 
